@@ -24,10 +24,10 @@ League* LeagueCreate(char* league_name, char* teamfile, char* matchfile){
 //free allocated memory for league object and all sub allocated memory
 void  LeagueDestroy(League* league){
     int i;
-    for (i=0; i<league->num_teams-1; i++){
+    for (i=0; i<league->num_teams; i++){
         TeamDestroy(league->teams[i]);
     }
-    for (i=0; i<league->num_matches-1; i++){
+    for (i=0; i<league->num_matches; i++){
         MatchDestroy(league->matches[i]);
     }
     free(league);
