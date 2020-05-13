@@ -24,11 +24,11 @@ League* LeagueCreate(char* league_name, char* teamfile, char* matchfile){
 //free allocated memory for league object and all sub allocated memory
 void  LeagueDestroy(League* league){
     int i;
-    for (i=0; i<league->num_teams; i++){
-        free(league->teams[i]);
+    for (i=0; i<league->num_teams-1; i++){
+        TeamDestroy(league->teams[i]);
     }
-    for (i=0; i<league->num_matches; i++){
-        free(league->matches[i]);
+    for (i=0; i<league->num_matches-1; i++){
+        MatchDestroy(league->matches[i]);
     }
     free(league);
 }
@@ -58,7 +58,9 @@ void read_teams(char* filename, League* league) {
         league->teams[league->num_teams] = TeamCreate(buf);
         league->num_teams++;
 
+
     }
+    free(buf);
     fclose(fp);
 }
 //function reads matches from  file, we assume a known input configuration, delimiter = tab
@@ -97,6 +99,7 @@ void read_matches(char *filename, League *league) {
         league->num_matches++;
 
     }
+    free(buf);
     fclose(fp);
 
 }
@@ -216,6 +219,7 @@ int num_points(League* league, Team* team){
 }
         void print_table(League* liga){
     int i;
+    printf("%s", liga->name);
     printf("%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t%-10s\t \n", "Teams", "Games", "Wins", "Ties", "Losses", "GF", "GA", "Points");
     for (i=0; i<liga->num_teams;i++){
         printf("%-10s\t%-10d\t%-10d\t%-10d\t%-10d\t%-10d\t%-10d\t%-10d\t \n", liga->teams[i]->team_name, num_games(liga,liga->teams[i]), num_wins(liga,liga->teams[i]), num_draws(liga,liga->teams[i]), num_losses(liga,liga->teams[i]), num_GF(liga,liga->teams[i]), num_GA(liga,liga->teams[i]), num_points(liga,liga->teams[i]));
